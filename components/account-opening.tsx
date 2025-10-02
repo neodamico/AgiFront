@@ -132,7 +132,7 @@ export function AccountOpening() {
                     <SelectContent>
                       <SelectItem value="conta-corrente">Conta Corrente</SelectItem>
                       <SelectItem value="conta-poupanca">Conta Poupança</SelectItem>
-                      <SelectItem value="conta-menor">Conta Menor de Idade</SelectItem>
+                      <SelectItem value="conta-menor">Conta Jovem</SelectItem>
                       <SelectItem value="conta-internacional">Conta Internacional</SelectItem>
                     </SelectContent>
                   </Select>

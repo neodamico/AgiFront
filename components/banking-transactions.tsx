@@ -44,11 +44,11 @@ export function BankingTransactions() {
         message = `Depósito de R$ ${valor.toFixed(2)} realizado com sucesso!`
         break
       case "saque-internacional":
-        const valorUSD = valor / exchangeRate
-        message = `Saque internacional de US$ ${valorUSD.toFixed(2)} (R$ ${valor.toFixed(2)}) realizado com sucesso!`
+        const valorUSD = valor * exchangeRate
+        message = `Saque internacional de R$ ${valorUSD.toFixed(2)} (US$ ${valor.toFixed(2)}) realizado com sucesso!`
         break
       case "deposito-internacional":
-        const valorConvertido = valor * exchangeRate
+        const valorConvertido = valor / exchangeRate
         message = `Depósito internacional de R$ ${valor.toFixed(2)} convertido para US$ ${valorConvertido.toFixed(2)} realizado com sucesso!`
         break
       case "transferencia-internacional":
@@ -125,7 +125,7 @@ export function BankingTransactions() {
                 </div>
               )}
               <div>
-                <Label htmlFor="valor">Valor * {isInternational && "(em Reais)"}</Label>
+                <Label htmlFor="valor">Valor * {isInternational ? (transactionData.tipo === 'deposito' ? '(em Reais)' : '(em Dolar)') : ''}</Label>
                 <Input
                   id="valor"
                   type="number"
@@ -176,7 +176,7 @@ export function BankingTransactions() {
                   {transactionData.tipoTransacao === "deposito-internacional" && (
                     <p>
                       <strong>Valor Convertido:</strong> US${" "}
-                      {(Number.parseFloat(transactionData.valor || "0") * exchangeRate).toFixed(2)}
+                      {(Number.parseFloat(transactionData.valor || "0") / exchangeRate).toFixed(2)}
                     </p>
                   )}
                   {transactionData.tipoTransacao === "transferencia-internacional" && (
