@@ -2,7 +2,9 @@
 
 import type React from "react"
 
+
 import { useState } from "react"
+import axios from "axios"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -10,27 +12,31 @@ import { Label } from "@/components/ui/label"
 import { BankingDashboard } from "@/components/banking-dashboard"
 
 export default function LoginPage() {
-  const [managerId, setManagerId] = useState("")
+  const [gerenteId, setGerenteId] = useState("")
   const [password, setPassword] = useState("")
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [error, setError] = useState("")
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault()
-    setError("")
+  const handleLogin = async (e: React.FormEvent) => {
+  e.preventDefault()
+  setError("")
 
-    // Validação simples para demonstração
-    if (!managerId || !password) {
-      setError("Por favor, preencha todos os campos")
-      return
-    }
-
-    if (managerId === "admin" && password === "123456") {
-      setIsLoggedIn(true)
-    } else {
-      setError("ID do gerente ou senha incorretos")
-    }
+  // Validação simples para demonstração
+  if (!gerenteId || !password) {
+    setError("Por favor, preencha todos os campos")
+    return
   }
+
+  try {
+    const response = await axios.post("http://localhost:8080/api/v1/gerentes/login", {
+      gerenteId: parseInt(gerenteId), // Converte para número, pois o backend espera Long
+      senha: password // Usa "senha" para alinhar com o backend
+    })
+    setIsLoggedIn(true) // Se sucesso, loga
+  } catch (error) {
+    setError("ID do gerente ou senha incorretos")
+  }
+}
 
   if (isLoggedIn) {
     return <BankingDashboard />
@@ -51,12 +57,12 @@ export default function LoginPage() {
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="managerId">ID do Gerente</Label>
+              <Label htmlFor="gerenteId">ID do Gerente</Label>
               <Input
-                id="managerId"
+                id="gerenteId"
                 type="text"
-                value={managerId}
-                onChange={(e) => setManagerId(e.target.value)}
+                value={gerenteId}
+                onChange={(e) => setGerenteId(e.target.value)}
                 placeholder="Digite seu ID"
                 className="h-12"
               />
